@@ -1,5 +1,4 @@
 class Game
-
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                        [1, 4, 7], [2, 5, 8], [3, 6, 9],
@@ -49,7 +48,6 @@ end
 
 class Square
   attr_accessor :value
-  attr_writer :played
   attr_reader :position
 
   @@square_counter = 1
@@ -62,10 +60,10 @@ class Square
   end
 
   def played(play)
-    if @is_played == false
-      self.value = play
-      @is_played = true
-    end
+    return if @is_played
+
+    self.value = play
+    @is_played = true
   end
 end
 
@@ -94,6 +92,7 @@ puts 'Pick your choice (Crosses or Circles):'
 
 until player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
   player1 = gets.chomp.downcase
+  puts 'Not a valid option' unless player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
 end
 
 player2 = (player1 == 'crosses' ? 'circles' : 'crosses')
@@ -113,9 +112,7 @@ while i <= 9
   puts "#{current_player.play} playing, pick a number:"
   until options.include?(number)
     number = gets.chomp.to_i
-    unless options.include?(number)
-      puts 'Not valid, number is not playable. Please pick another:'
-    end
+    puts 'Not valid, number is not playable. Please pick another:' unless options.include?(number)
   end
 
   board.get_number(number).played(current_player.play)
