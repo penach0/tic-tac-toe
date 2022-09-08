@@ -1,3 +1,21 @@
+class Game
+
+  def initialize
+    @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
+                       [1, 4, 7], [2, 5, 8], [3, 6, 9],
+                       [1, 5, 9], [3, 5, 7]]
+  end
+
+  def check_if_won?(board, play)
+    won = false
+    @win_conditions.each do |line|
+      won = (line - board.get_positions(play)).empty?
+      break if won == true
+    end
+    won
+  end
+end
+
 class Board
   attr_reader :board
 
@@ -19,16 +37,26 @@ class Board
       return square if index == number
     end
   end
+
+  def get_positions(play)
+    positions = []
+    @board.flatten.each do |square|
+      positions << square.position if square.value == play
+    end
+    positions
+  end
 end
 
 class Square
   attr_accessor :value
   attr_writer :played
+  attr_reader :position
 
   @@square_counter = 1
 
   def initialize
-    @value = @@square_counter
+    @position = @@square_counter
+    @value = @position
     @is_played = false
     @@square_counter += 1
   end
@@ -37,16 +65,15 @@ class Square
     if @is_played == false
       self.value = play
       @is_played = true
-    else
-      puts 'Already played. Pick another one:'
     end
   end
 end
 
 class Player
-  attr_accessor :play
+  attr_reader :player_number, :play
 
-  def initialize(choice)
+  def initialize(player_number, choice)
+    @player_number = player_number
     case choice
     when 'crosses'
       @play = 'X'
@@ -59,10 +86,9 @@ end
 # main
 
 player1 = ''
-player2 = ''
+game = Game.new
 board = Board.new
 options = Array(1..9)
-puts options.inspect
 
 puts 'Pick your choice (Crosses or Circles):'
 
@@ -70,17 +96,10 @@ until player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
   player1 = gets.chomp.downcase
 end
 
-if player1 == 'crosses'
-  player2 = 'circles'
-else
-  player2 = 'crosses'
-end
+player2 = (player1 == 'crosses' ? 'circles' : 'crosses')
 
-player1 = Player.new(player1)
-player2 = Player.new(player2)
-
-puts player1.inspect
-puts player2.inspect
+player1 = Player.new(1, player1)
+player2 = Player.new(2, player2)
 
 board.show_board
 
@@ -89,25 +108,24 @@ while i <= 9
 
   number = 0
 
-  if i.odd?
-    turn = 'X'
-    current_player = player1
-  else
-    turn = 'O'
-    current_player = player2
-  end
+  current_player = i.odd? ? player1 : player2
 
-  puts "#{turn} playing, pick a number:"
+  puts "#{current_player.play} playing, pick a number:"
   until options.include?(number)
     number = gets.chomp.to_i
-    puts 'Not valid, number is not playable. Please pick another:'
+    unless options.include?(number)
+      puts 'Not valid, number is not playable. Please pick another:'
+    end
   end
 
   board.get_number(number).played(current_player.play)
-
   options.delete(number)
-
   board.show_board
+
+  if game.check_if_won?(board, current_player.play)
+    puts "Game over. Player #{current_player.player_number} (#{current_player.play}) won!!"
+    break
+  end
 
   i += 1
 end
