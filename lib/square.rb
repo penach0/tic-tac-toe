@@ -2,13 +2,10 @@ class Square
   attr_accessor :value
   attr_reader :position
 
-  @@square_counter = 1
-
-  def initialize
-    @position = @@square_counter
-    @value = @position
+  def initialize(value)
+    @position = value
+    @value = value
     @is_played = false
-    @@square_counter += 1
   end
 
   def played(play)
