@@ -5,12 +5,10 @@ class Game
                        [1, 5, 9], [3, 5, 7]]
   end
 
-  def check_if_won?(board, play)
-    won = false
+  def game_won?(board, play)
     @win_conditions.each do |line|
-      won = (line - board.get_positions(play)).empty?
-      break if won == true
+      return true if (line - board.get_positions(play)).empty?
     end
-    won
+    false
   end
 end
