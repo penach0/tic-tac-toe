@@ -1,3 +1,8 @@
+require_relative 'game'
+require_relative 'board'
+require_relative 'player'
+require_relative 'square'
+
 player1 = ''
 game = Game.new
 board = Board.new
@@ -34,7 +39,7 @@ while i <= 9
   options.delete(number)
   board.show_board
 
-  if game.check_if_won?(board, current_player.play)
+  if game.game_won?(board, current_player.play)
     puts "Game over. Player #{current_player.player_number} (#{current_player.play}) won!!"
     break
   end
