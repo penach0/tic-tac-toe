@@ -1,4 +1,6 @@
-require_relative '../tic_tac_toe'
+require_relative '../lib/game'
+require_relative '../lib/board'
+require_relative '../lib/square'
 
 describe Game do
   subject(:game) { described_class.new }
