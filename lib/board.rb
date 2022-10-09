@@ -14,8 +14,8 @@ class Board
     end
   end
 
-  def get_number(number)
-    @board.flatten.each.with_index(1) do |square, index|
+  def get_square(number)
+    board.flatten.each.with_index(1) do |square, index|
       return square if index == number
     end
   end

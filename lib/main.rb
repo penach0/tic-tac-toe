@@ -35,9 +35,11 @@ while i <= 9
     puts 'Not valid, number is not playable. Please pick another:' unless options.include?(number)
   end
 
-  board.get_number(number).played(current_player.play)
+  board.get_square(number).played(current_player.play)
   options.delete(number)
   board.show_board
+  p board.get_positions('X')
+  p board.get_positions('O')
 
   if game.game_won?(board, current_player.play)
     puts "Game over. Player #{current_player.player_number} (#{current_player.play}) won!!"
