@@ -82,17 +82,21 @@ class Player
 end
 
 # main
-
+=begin 
 player1 = ''
 game = Game.new
 board = Board.new
 options = Array(1..9)
 
+def check_player_choice(choice)
+  choice.casecmp('crosses').zero? || choice.casecmp('circles').zero?
+end
+
 puts 'Pick your choice (Crosses or Circles):'
 
-until player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
+until check_player_choice(player1)
   player1 = gets.chomp.downcase
-  puts 'Not a valid option' unless player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
+  puts 'Not a valid option' unless check_player_choice(player1)
 end
 
 player2 = (player1 == 'crosses' ? 'circles' : 'crosses')
@@ -124,5 +128,8 @@ while i <= 9
     break
   end
 
+  puts 'Its a draw!' if options.empty?
+
   i += 1
 end
+=end
