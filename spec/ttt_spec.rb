@@ -1,18 +1,21 @@
 require_relative '../lib/game'
-require_relative '../lib/board'
-require_relative '../lib/square'
 
 describe Game do
   subject(:game) { described_class.new }
-  let(:board) { Board.new }
+  let(:board) { double('board') }
 
   describe '#game_won?' do
     context 'game ends when win condition is met' do
-      before do
-        allow(board).to receive(:get_positions).with('X').and_return([1, 2, 3])
-      end
-      it 'ends when X completes top line' do
-        expect(game.game_won?(board, 'X')).to be true
+      context 'horizontal wins' do
+        it 'ends when X completes top line' do
+          allow(board).to receive(:get_positions).with('X').and_return([1, 2, 3])
+          expect(game.game_won?(board, 'X')).to be true
+        end
+
+        it 'ends when X completes middle line' do
+          allow(board).to receive(:get_positions).with('X').and_return([4, 5, 6])
+          expect(game.game_won?(board, 'X')).to be true
+        end
       end
     end
   end
