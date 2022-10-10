@@ -23,9 +23,7 @@ class Board
   end
 
   def get_square(number)
-    board.flatten.each.with_index(1) do |square, index|
-      return square if index == number
-    end
+    board.flatten.find { |square| square.value == number }
   end
 
   def get_positions(play)
