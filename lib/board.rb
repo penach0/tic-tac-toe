@@ -2,14 +2,18 @@ class Board
   attr_reader :board
 
   def initialize
+    @board = create_board
+  end
+
+  def create_board
     count = 0
-    @board = Array.new(3) { Array.new(3) }
-                  .map do |row|
-                    row.map do
-                      count += 1
-                      Square.new(count)
-                    end
-                  end
+    Array.new(3) { Array.new(3) }
+         .map do |row|
+            row.map do
+              count += 1
+              Square.new(count)
+            end
+    end
   end
 
   def show_board
