@@ -34,17 +34,21 @@ describe Board do
     end
     context 'when plays have been made' do
       before do
-        @full_board = board.board.map do |square|
-          case square.position
-          when 1, 3, 5, 8 then square.value = 'X'
-          when 2, 4, 6, 7, 9 then square.value = 'O'
+        board.board.each do |row|
+          row.each do |square|
+            case square.position
+            when 1, 3, 5, 8 then square.value = 'X'
+            when 2, 4, 6, 7, 9 then square.value = 'O'
+            end
           end
         end
       end
       it 'returns array when play is X' do
-        expect(@full_board.get_positions('X')).to eq([1, 3, 5, 8])
+        expect(board.get_positions('X')).to eq([1, 3, 5, 8])
       end
-      it 'returns array when play is O'
+      it 'returns array when play is O' do
+        expect(board.get_positions('O')).to eq([2, 4, 6, 7, 9])
+      end
     end
   end
 end
