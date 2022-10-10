@@ -3,18 +3,21 @@ require_relative 'board'
 require_relative 'player'
 require_relative 'square'
 
-player1 = ''
 game = Game.new
 board = Board.new
 options = Array(1..9)
 
-puts 'Pick your choice (Crosses or Circles):'
+def pick_play
+  print 'Pick your choice (Crosses or Circles): '
+  loop do
+    play = gets.chomp.downcase
+    return play if %w[crosses circles].include?(play)
 
-until player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
-  player1 = gets.chomp.downcase
-  puts 'Not a valid option' unless player1.casecmp('crosses').zero? || player1.casecmp('circles').zero?
+    print 'That is not a valid option. Try again:'
+  end
 end
 
+player1 = pick_play
 player2 = (player1 == 'crosses' ? 'circles' : 'crosses')
 
 player1 = Player.new(1, player1)
