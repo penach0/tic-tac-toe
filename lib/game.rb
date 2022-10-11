@@ -15,6 +15,11 @@ class Game
     end
   end
 
+  def create_players(choice)
+    @player1 = Player.new(choice)
+    @player2 = Player.new(choice == 'crosses' ? 'circles' : 'crosses')
+  end
+
   def game_won?(board, play)
     @win_conditions.each do |line|
       return true if (line - board.get_positions(play)).empty?
