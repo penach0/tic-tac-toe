@@ -1,5 +1,5 @@
 require_relative '../lib/game'
-require_relative '../lib/player'
+# require_relative '../lib/player'
 
 describe Game do
   describe '#game_won?' do
@@ -100,13 +100,82 @@ describe Game do
   describe '#create_players' do
     subject(:game_players) { described_class.new }
     let(:player) { class_double('Player').as_stubbed_const }
+
     context 'when choice is crosses' do
       choice = 'crosses'
       other_choice = 'circles'
+
       it 'instantiates players with the correct choices' do
         expect(player).to receive(:new).with(choice)
         expect(player).to receive(:new).with(other_choice)
         game_players.create_players(choice)
+      end
+    end
+  end
+
+  describe '#pick_square' do
+    subject(:game_square) { described_class.new }
+    let(:current_player) { double('Player', play: 'X') }
+
+    context 'when entering a char that is not a number' do
+      before do
+        non_number1 = '_'
+        non_number2 = 'a'
+        valid_input = '5'
+        allow(game_square).to receive(:gets).and_return(non_number1, non_number2, valid_input)
+      end
+
+      it 'warns the user the char is not permitted' do
+        initial_message = "#{current_player.play} playing, pick a number:"
+        error_message = 'Not valid. Please pick another: '
+
+        expect(game_square).to receive(:print).with(initial_message)
+        expect(game_square).to receive(:print).with(error_message).twice
+        game_square.pick_square(current_player)
+      end
+    end
+    context 'when entering a number outside of range' do
+      before do
+        outside_number1 = '11'
+        outside_number2 = '0'
+        valid_input = '6'
+        allow(game_square).to receive(:gets).and_return(outside_number1, outside_number2, valid_input)
+      end
+      it 'warns the user the number is outside range' do
+        initial_message = "#{current_player.play} playing, pick a number:"
+        error_message = 'Not valid. Please pick another: '
+
+        expect(game_square).to receive(:print).with(initial_message)
+        expect(game_square).to receive(:print).with(error_message).twice
+        game_square.pick_square(current_player)
+      end
+    end
+    context 'when entering a number already played' do
+      before do
+        already_played = '5'
+        valid_input = '9'
+        allow(game_square).to receive(:gets).and_return(already_played, valid_input)
+        allow(game_square.board).to receive(:get_square).with(already_played.to_i).and_return nil
+        allow(game_square.board).to receive(:get_square).with(valid_input.to_i).and_call_original
+      end
+      it 'warns the user that the number has been played' do
+        initial_message = "#{current_player.play} playing, pick a number:"
+        error_message = 'Not valid. Please pick another: '
+        expect(game_square).to receive(:print).with(initial_message)
+        expect(game_square).to receive(:print).with(error_message)
+        game_square.pick_square(current_player)
+      end
+    end
+    context 'when entering a valid number' do
+      before do
+        valid_input = '5'
+        allow(game_square).to receive(:gets).and_return(valid_input)
+      end
+
+      it 'ends the loop and returns the correct square object' do
+        square = instance_double('Square', value: 5)
+        return_square = game_square.pick_square(current_player)
+        expect(return_square.value).to eq(square.value)
       end
     end
   end

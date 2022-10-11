@@ -1,5 +1,8 @@
 require_relative 'board'
+require_relative 'square'
+
 class Game
+  attr_reader :board
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                        [1, 4, 7], [2, 5, 8], [3, 6, 9],
@@ -23,13 +26,13 @@ class Game
   end
 
   def pick_square(current_player)
-    puts "#{current_player.play} playing, pick a number:"
+    print "#{current_player.play} playing, pick a number:"
     loop do
       number = gets.chomp.to_i
-      square = board.get_square(number)
+      square = board.get_square(number) if (0..9).include?(number)
       return square unless square.nil?
 
-      print 'Not valid, number is not playable. Please pick another: '
+      print 'Not valid. Please pick another: '
     end
   end
 
