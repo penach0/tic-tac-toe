@@ -11,7 +11,7 @@ class Game
       play = gets.chomp.downcase
       return play if %w[crosses circles].include?(play)
 
-      print 'That is not a valid option. Try again:'
+      print 'That is not a valid option. Try again: '
     end
   end
 
