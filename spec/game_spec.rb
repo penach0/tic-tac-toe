@@ -1,4 +1,5 @@
 require_relative '../lib/game'
+require_relative '../lib/player'
 
 describe Game do
   describe '#game_won?' do
@@ -92,6 +93,20 @@ describe Game do
         expect(game_pick).to receive(:print).with(initial_message)
         expect(game_pick).to receive(:print).with(error_message).twice
         game_pick.pick_play
+      end
+    end
+  end
+
+  describe '#create_players' do
+    subject(:game_players) { described_class.new }
+    let(:player) { class_double('Player').as_stubbed_const }
+    context 'when choice is crosses' do
+      choice = 'crosses'
+      other_choice = 'circles'
+      it 'instantiates players with the correct choices' do
+        expect(player).to receive(:new).with(choice)
+        expect(player).to receive(:new).with(other_choice)
+        game_players.create_players(choice)
       end
     end
   end
