@@ -29,7 +29,7 @@ class Game
     print "#{current_player.play} playing, pick a number:"
     loop do
       number = gets.chomp.to_i
-      square = board.get_square(number) if (0..9).include?(number)
+      square = board.get_square(number)
       return square unless square.nil?
 
       print 'Not valid. Please pick another: '
