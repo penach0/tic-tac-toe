@@ -1,8 +1,10 @@
+require_relative 'board'
 class Game
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                        [1, 4, 7], [2, 5, 8], [3, 6, 9],
                        [1, 5, 9], [3, 5, 7]]
+    @board = Board.new
   end
 
   def pick_play
@@ -18,6 +20,17 @@ class Game
   def create_players(choice)
     @player1 = Player.new(choice)
     @player2 = Player.new(choice == 'crosses' ? 'circles' : 'crosses')
+  end
+
+  def pick_square(current_player)
+    puts "#{current_player.play} playing, pick a number:"
+    loop do
+      number = gets.chomp.to_i
+      square = board.get_square(number)
+      return square unless square.nil?
+
+      print 'Not valid, number is not playable. Please pick another: '
+    end
   end
 
   def game_won?(board, play)
