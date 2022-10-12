@@ -36,7 +36,7 @@ class Game
     end
   end
 
-  def game_won?(board, mark)
+  def game_won?(mark)
     @win_conditions.each do |line|
       return true if (line - board.get_positions(mark)).empty?
     end
