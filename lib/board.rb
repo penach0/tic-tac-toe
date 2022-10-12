@@ -7,12 +7,11 @@ class Board
 
   def create_board
     count = 0
-    Array.new(3) { Array.new(3) }
-         .map do |row|
-            row.map do
-              count += 1
-              Square.new(count)
-            end
+    Array.new(3) { Array.new(3) }.map do |row|
+      row.map do
+        count += 1
+        Square.new(count)
+      end
     end
   end
 
@@ -26,10 +25,10 @@ class Board
     board.flatten.find { |square| square.value == number }
   end
 
-  def get_positions(play)
+  def get_positions(mark)
     positions = []
     @board.flatten.each do |square|
-      positions << square.position if square.value == play
+      positions << square.position if square.value == mark
     end
     positions
   end

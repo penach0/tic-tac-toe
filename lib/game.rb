@@ -10,11 +10,11 @@ class Game
     @board = Board.new
   end
 
-  def pick_play
+  def pick_mark
     print 'Pick your choice (Crosses or Circles): '
     loop do
-      play = gets.chomp.downcase
-      return play if %w[crosses circles].include?(play)
+      choice = gets.chomp.downcase
+      return choice if %w[crosses circles].include?(choice)
 
       print 'That is not a valid option. Try again: '
     end
@@ -36,9 +36,9 @@ class Game
     end
   end
 
-  def game_won?(board, play)
+  def game_won?(board, mark)
     @win_conditions.each do |line|
-      return true if (line - board.get_positions(play)).empty?
+      return true if (line - board.get_positions(mark)).empty?
     end
     false
   end

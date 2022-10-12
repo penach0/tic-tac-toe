@@ -62,7 +62,7 @@ describe Game do
     end
   end
 
-  describe '#pick_play' do
+  describe '#pick_mark' do
     subject(:game_pick) { described_class.new }
 
     context 'when entering valid input' do
@@ -75,7 +75,7 @@ describe Game do
         error_message = 'That is not a valid option. Try again:'
         expect(game_pick).to receive(:print).with(initial_message)
         expect(game_pick).not_to receive(:print).with(error_message)
-        game_pick.pick_play
+        game_pick.pick_mark
       end
     end
     context 'when entering valid input' do
@@ -92,7 +92,7 @@ describe Game do
 
         expect(game_pick).to receive(:print).with(initial_message)
         expect(game_pick).to receive(:print).with(error_message).twice
-        game_pick.pick_play
+        game_pick.pick_mark
       end
     end
   end
@@ -166,6 +166,22 @@ describe Game do
         game_square.pick_square(current_player)
       end
     end
+    context 'when entering a play character (X)' do
+      before do
+        play_char = 'X'
+        valid_input = '5'
+        allow(game_square).to receive(:gets).and_return(play_char, valid_input)
+      end
+
+      it 'warns the users of invalid input' do
+        initial_message = "#{current_player.play} playing, pick a number:"
+        error_message = 'Not valid. Please pick another: '
+        expect(game_square).to receive(:print).with(initial_message)
+        expect(game_square).to receive(:print).with(error_message)
+        game_square.pick_square(current_player)
+      end
+    end
+
     context 'when entering a valid number' do
       before do
         valid_input = '5'

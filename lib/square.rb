@@ -11,9 +11,9 @@ class Square
     %w[X O].include?(value)
   end
 
-  def play(play)
+  def play(mark)
     return if played?
 
-    self.value = play
+    self.value = mark
   end
 end

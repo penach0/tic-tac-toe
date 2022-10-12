@@ -1,7 +1,7 @@
 class Player
-  attr_reader :play
+  attr_reader :mark
 
   def initialize(choice)
-    @play = (choice == 'crosses' ? 'X' : 'O')
+    @mark = (choice == 'crosses' ? 'X' : 'O')
   end
 end
