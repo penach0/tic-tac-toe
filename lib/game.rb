@@ -2,7 +2,7 @@ require_relative 'board'
 require_relative 'square'
 
 class Game
-  attr_reader :board
+  attr_reader :board, :player1, :player2
 
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
@@ -47,6 +47,10 @@ class Game
       return true if (line - board.get_positions(mark)).empty?
     end
     false
+  end
+
+  def game_drawn?
+    board.full? && (game_won? == false)
   end
 
   def show_board
