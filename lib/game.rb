@@ -10,7 +10,16 @@ class Game
                        [1, 5, 9], [3, 5, 7]]
     @board = Board.new
   end
-  
+
+  def play
+    create_players(pick_mark)
+    current_player = player1
+    until game_won?(current_player.mark) || game_drawn?
+      turn(current_player)
+      current_player = change_player(current_player)
+    end
+  end
+
   def turn(current_player)
     show_board
     pick_square(current_player).play
@@ -36,7 +45,7 @@ class Game
   end
 
   def pick_square(current_player)
-    print "#{current_player.play} playing, pick a number:"
+    print "#{current_player.mark} playing, pick a number:"
     loop do
       number = gets.chomp.to_i
       square = board.get_square(number)
