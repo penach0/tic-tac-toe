@@ -10,10 +10,14 @@ class Game
                        [1, 5, 9], [3, 5, 7]]
     @board = Board.new
   end
-
+  
   def turn(current_player)
     show_board
     pick_square(current_player).play
+  end
+
+  def change_player(player)
+    player == player1 ? player2 : player1
   end
 
   def pick_mark
