@@ -11,6 +11,11 @@ class Game
     @board = Board.new
   end
 
+  def turn(current_player)
+    show_board
+    pick_square(current_player).play
+  end
+
   def pick_mark
     print 'Pick your choice (Crosses or Circles): '
     loop do
