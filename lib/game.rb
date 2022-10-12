@@ -3,6 +3,7 @@ require_relative 'square'
 
 class Game
   attr_reader :board
+
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
                        [1, 4, 7], [2, 5, 8], [3, 6, 9],
@@ -41,5 +42,11 @@ class Game
       return true if (line - board.get_positions(mark)).empty?
     end
     false
+  end
+
+  def show_board
+    board.each_with_index do |_row, index|
+      puts " #{board[index][0].value} | #{board[index][1].value} | #{board[index][2].value} "
+    end
   end
 end

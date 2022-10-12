@@ -15,12 +15,6 @@ class Board
     end
   end
 
-  def show_board
-    @board.each_with_index do |_row, index|
-      puts " #{@board[index][0].value} | #{@board[index][1].value} | #{@board[index][2].value} "
-    end
-  end
-
   def get_square(number)
     board.flatten.find { |square| square.value == number }
   end
