@@ -32,4 +32,8 @@ class Board
     end
     positions
   end
+
+  def full?
+    board.flatten.none? { |square| square.value.is_a?(Integer) }
+  end
 end
