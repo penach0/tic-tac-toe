@@ -5,13 +5,15 @@ class Square
   def initialize(value)
     @position = value
     @value = value
-    @is_played = false
   end
 
-  def played(play)
-    return if @is_played
+  def played?
+    %w[X O].include?(value)
+  end
+
+  def play(play)
+    return if played?
 
     self.value = play
-    @is_played = true
   end
 end
