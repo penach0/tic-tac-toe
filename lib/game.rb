@@ -20,14 +20,15 @@ class Game
   def play
     game_setup
     until game_won?(current_player.mark) || game_drawn?
-      turn(current_player)
+      turn
       current_player = change_player(current_player)
     end
+    puts end_message
   end
 
-  def turn(current_player)
+  def turn
     show_board
-    pick_square(current_player).play
+    pick_square.play(current_player.mark)
   end
 
   def change_player(player)
@@ -49,7 +50,7 @@ class Game
     @player2 = Player.new(choice == 'crosses' ? 'circles' : 'crosses')
   end
 
-  def pick_square(current_player)
+  def pick_square
     print "#{current_player.mark} playing, pick a number:"
     loop do
       number = gets.chomp.to_i
@@ -75,5 +76,10 @@ class Game
     board.each_with_index do |_row, index|
       puts " #{board[index][0].value} | #{board[index][1].value} | #{board[index][2].value} "
     end
+  end
+
+  def end_message
+    return "#{current_player.mark} player won! Congratulations!" if game_won?(current_player.mark)
+    return 'It\'s a draw! Well played by both.' if game_drawn?
   end
 end

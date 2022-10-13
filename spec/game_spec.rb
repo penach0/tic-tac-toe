@@ -115,7 +115,7 @@ describe Game do
 
   describe '#pick_square' do
     subject(:game_square) { described_class.new }
-    let(:current_player) { double('Player', mark: 'X') }
+    let(:current_player) { instance_double('Player', mark: 'X') }
 
     context 'when entering a char that is not a number' do
       before do
@@ -126,12 +126,13 @@ describe Game do
       end
 
       it 'warns the user the char is not permitted' do
+        game_square.current_player = current_player
         initial_message = "#{current_player.mark} playing, pick a number:"
         error_message = 'Not valid. Please pick another: '
 
         expect(game_square).to receive(:print).with(initial_message)
         expect(game_square).to receive(:print).with(error_message).twice
-        game_square.pick_square(current_player)
+        game_square.pick_square
       end
     end
     context 'when entering a number outside of range' do
@@ -142,12 +143,13 @@ describe Game do
         allow(game_square).to receive(:gets).and_return(outside_number1, outside_number2, valid_input)
       end
       it 'warns the user the number is outside range' do
+        game_square.current_player = current_player
         initial_message = "#{current_player.mark} playing, pick a number:"
         error_message = 'Not valid. Please pick another: '
 
         expect(game_square).to receive(:print).with(initial_message)
         expect(game_square).to receive(:print).with(error_message).twice
-        game_square.pick_square(current_player)
+        game_square.pick_square
       end
     end
     context 'when entering a number already played' do
@@ -159,11 +161,12 @@ describe Game do
         allow(game_square.board).to receive(:get_square).with(valid_input.to_i).and_call_original
       end
       it 'warns the user that the number has been played' do
+        game_square.current_player = current_player
         initial_message = "#{current_player.mark} playing, pick a number:"
         error_message = 'Not valid. Please pick another: '
         expect(game_square).to receive(:print).with(initial_message)
         expect(game_square).to receive(:print).with(error_message)
-        game_square.pick_square(current_player)
+        game_square.pick_square
       end
     end
     context 'when entering a play character (X)' do
@@ -174,11 +177,12 @@ describe Game do
       end
 
       it 'warns the users of invalid input' do
+        game_square.current_player = current_player
         initial_message = "#{current_player.mark} playing, pick a number:"
         error_message = 'Not valid. Please pick another: '
         expect(game_square).to receive(:print).with(initial_message)
         expect(game_square).to receive(:print).with(error_message)
-        game_square.pick_square(current_player)
+        game_square.pick_square
       end
     end
 
@@ -189,8 +193,9 @@ describe Game do
       end
 
       it 'ends the loop and returns the correct square object' do
+        game_square.current_player = current_player
         square = instance_double('Square', value: 5)
-        return_square = game_square.pick_square(current_player)
+        return_square = game_square.pick_square
         expect(return_square.value).to eq(square.value)
       end
     end
