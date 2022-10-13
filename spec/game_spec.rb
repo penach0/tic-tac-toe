@@ -208,6 +208,7 @@ describe Game do
       before do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_won?).and_return(false, true)
+        allow(game_play).to receive(:play_again?).and_return(false)
       end
       it 'calls #turn and #change_player once and displays victory message' do
         game_play.current_player = current_player
@@ -222,6 +223,7 @@ describe Game do
       before do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_drawn?).and_return(false, true)
+        allow(game_play).to receive(:play_again?).and_return(false)
       end
       it 'calls #turn and #change_player once and displays draw message' do
         game_play.current_player = current_player
@@ -229,6 +231,23 @@ describe Game do
         expect(game_play).to receive(:turn).once
         expect(game_play).to receive(:change_player).once
         expect(game_play).to receive(:puts).with(draw_message)
+        game_play.play
+      end
+    end
+
+    context 'when play again is true once' do
+      let(:new_game) { described_class.new }
+      before do
+        allow(game_play).to receive(:game_setup)
+        allow(game_play).to receive(:game_won?).and_return(true)
+        allow(game_play).to receive(:play_again?).and_return(true)
+        allow(new_game).to receive(:play_again?).and_return(false)
+        allow(Game).to receive(:new).and_return(new_game)
+      end
+      it 'calls play on new Game instance' do
+        game_play.current_player = current_player
+        expect(Game).to receive(:new)
+        expect(new_game).to receive(:play)
         game_play.play
       end
     end
