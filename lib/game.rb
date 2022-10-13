@@ -15,15 +15,19 @@ class Game
   def game_setup
     create_players(pick_mark)
     @current_player = player1
+    show_board
   end
 
   def play
     game_setup
-    until game_won?(current_player.mark) || game_drawn?
+    loop do
       turn
-      current_player = change_player(current_player)
+      break if game_won? || game_drawn?
+
+      @current_player = change_player
     end
     puts end_message
+    Game.new.play if play_again?
   end
 
   def play_again?
@@ -38,12 +42,12 @@ class Game
   end
 
   def turn
+    pick_square.play(@current_player.mark)
     show_board
-    pick_square.play(current_player.mark)
   end
 
-  def change_player(player)
-    player == player1 ? player2 : player1
+  def change_player
+    @current_player == player1 ? player2 : player1
   end
 
   def pick_mark
@@ -62,7 +66,7 @@ class Game
   end
 
   def pick_square
-    print "#{current_player.mark} playing, pick a number:"
+    print "#{@current_player.mark} playing, pick a number:"
     loop do
       number = gets.chomp.to_i
       square = board.get_square(number)
@@ -72,9 +76,9 @@ class Game
     end
   end
 
-  def game_won?(mark)
+  def game_won?
     @win_conditions.each do |line|
-      return true if (line - board.get_positions(mark)).empty?
+      return true if (line - board.get_positions(@current_player.mark)).empty?
     end
     false
   end
@@ -84,13 +88,14 @@ class Game
   end
 
   def show_board
-    board.each_with_index do |_row, index|
-      puts " #{board[index][0].value} | #{board[index][1].value} | #{board[index][2].value} "
+    board_array = board.board
+    board_array.each_with_index do |_row, index|
+      puts " #{board_array[index][0].value} | #{board_array[index][1].value} | #{board_array[index][2].value} "
     end
   end
 
   def end_message
-    return "#{current_player.mark} player won! Congratulations!" if game_won?(current_player.mark)
+    return "#{@current_player.mark} player won! Congratulations!" if game_won?
     return 'It\'s a draw! Well played by both.' if game_drawn?
   end
 end
