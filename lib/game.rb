@@ -5,10 +5,11 @@ class Game
   attr_reader :board, :player1, :player2
   attr_accessor :current_player
 
+  WIN_CONDITIONS = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
+                    [1, 4, 7], [2, 5, 8], [3, 6, 9],
+                    [1, 5, 9], [3, 5, 7]].freeze
+
   def initialize
-    @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
-                       [1, 4, 7], [2, 5, 8], [3, 6, 9],
-                       [1, 5, 9], [3, 5, 7]]
     @board = Board.new
   end
 
@@ -77,7 +78,7 @@ class Game
   end
 
   def game_won?
-    @win_conditions.each do |line|
+    WIN_CONDITIONS.each do |line|
       return true if (line - board.get_positions(@current_player.mark)).empty?
     end
     false
