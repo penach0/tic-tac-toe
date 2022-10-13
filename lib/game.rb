@@ -3,6 +3,7 @@ require_relative 'square'
 
 class Game
   attr_reader :board, :player1, :player2
+  attr_accessor :current_player
 
   def initialize
     @win_conditions = [[1, 2, 3], [4, 5, 6], [7, 8, 9],
@@ -11,9 +12,13 @@ class Game
     @board = Board.new
   end
 
-  def play
+  def game_setup
     create_players(pick_mark)
-    current_player = player1
+    @current_player = player1
+  end
+
+  def play
+    game_setup
     until game_won?(current_player.mark) || game_drawn?
       turn(current_player)
       current_player = change_player(current_player)
