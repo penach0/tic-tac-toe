@@ -6,58 +6,66 @@ describe Game do
     subject(:game_won) { described_class.new }
     let(:board) { game_won.board }
 
+    before(:each) do
+      game_won.current_player = current_player
+    end
+
     context 'game ends when win condition is met' do
       context 'horizontal wins' do
+        let(:current_player) { instance_double('Player', mark: 'X') }
         it 'ends when X completes top line' do
           allow(board).to receive(:get_positions).with('X').and_return([1, 2, 3])
-          expect(game_won.game_won?('X')).to be true
+          expect(game_won.game_won?).to be true
         end
 
         it 'ends when X completes middle line' do
           allow(board).to receive(:get_positions).with('X').and_return([4, 5, 6])
-          expect(game_won.game_won?('X')).to be true
+          expect(game_won.game_won?).to be true
         end
 
-        it 'ends when O completes the bottom line' do
-          allow(board).to receive(:get_positions).with('O').and_return([7, 8, 9])
-          expect(game_won.game_won?('O')).to be true
+        it 'ends when X completes the bottom line' do
+          allow(board).to receive(:get_positions).with('X').and_return([7, 8, 9])
+          expect(game_won.game_won?).to be true
         end
       end
 
       context 'vertical wins' do
+        let(:current_player) { instance_double('Player', mark: 'O') }
         it 'ends when O completes the left line' do
           allow(board).to receive(:get_positions).with('O').and_return([1, 4, 7])
-          expect(game_won.game_won?('O')).to be true
+          expect(game_won.game_won?).to be true
         end
 
-        it 'ends when X completes the middle line' do
-          allow(board).to receive(:get_positions).with('X').and_return([2, 5, 8])
-          expect(game_won.game_won?('X')).to be true
+        it 'ends when O completes the middle line' do
+          allow(board).to receive(:get_positions).with('O').and_return([2, 5, 8])
+          expect(game_won.game_won?).to be true
         end
 
         it 'ends when O completes the right line' do
           allow(board).to receive(:get_positions).with('O').and_return([3, 6, 9])
-          expect(game_won.game_won?('O')).to be true
+          expect(game_won.game_won?).to be true
         end
       end
 
       context 'diagonal wins' do
+        let(:current_player) { instance_double('Player', mark: 'X') }
         it 'ends when X completes top left diagonal' do
           allow(board).to receive(:get_positions).with('X').and_return([1, 5, 9])
-          expect(game_won.game_won?('X')).to be true
+          expect(game_won.game_won?).to be true
         end
 
         it 'ends when O completes top right diagonal' do
-          allow(board).to receive(:get_positions).with('O').and_return([3, 5, 7])
-          expect(game_won.game_won?('O')).to be true
+          allow(board).to receive(:get_positions).with('X').and_return([3, 5, 7])
+          expect(game_won.game_won?).to be true
         end
       end
     end
 
     context 'game does not end when winning condition is not met' do
+      let(:current_player) { instance_double('Player', mark: 'X') }
       it 'does not end when X has no winning lines' do
         allow(board).to receive(:get_positions).with('X').and_return([1, 3, 4, 5])
-        expect(game_won.game_won?('X')).to be false
+        expect(game_won.game_won?).to be false
       end
     end
   end
@@ -204,16 +212,20 @@ describe Game do
   describe '#play' do
     subject(:game_play) { described_class.new }
     let(:current_player) { instance_double('Player', mark: 'X') }
+    victory_message = 'X player won! Congratulations!'
+    draw_message = 'It\'s a draw! Well played by both.'
+
     context 'when #game_won is false once' do
       before do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_won?).and_return(false, true)
         allow(game_play).to receive(:play_again?).and_return(false)
+        allow(game_play).to receive(:end_message).and_return(victory_message)
       end
-      it 'calls #turn and #change_player once and displays victory message' do
+      it 'calls #turn twice and #change_player once and displays victory message' do
         game_play.current_player = current_player
         victory_message = "#{current_player.mark} player won! Congratulations!"
-        expect(game_play).to receive(:turn).once
+        expect(game_play).to receive(:turn).twice
         expect(game_play).to receive(:change_player).once
         expect(game_play).to receive(:puts).with(victory_message)
         game_play.play
@@ -224,12 +236,12 @@ describe Game do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_drawn?).and_return(false, true)
         allow(game_play).to receive(:play_again?).and_return(false)
+        allow(game_play).to receive(:end_message).and_return(draw_message)
       end
-      it 'calls #turn and #change_player once and displays draw message' do
+      it 'calls #turn twice and #change_player once and displays draw message' do
         game_play.current_player = current_player
-        draw_message = 'It\'s a draw! Well played by both.'
-        expect(game_play).to receive(:turn).once
-        expect(game_play).to receive(:change_player).once
+        expect(game_play).to receive(:turn).twice
+        expect(game_play).to receive(:change_player).and_return(current_player)
         expect(game_play).to receive(:puts).with(draw_message)
         game_play.play
       end
@@ -241,11 +253,12 @@ describe Game do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_won?).and_return(true)
         allow(game_play).to receive(:play_again?).and_return(true)
-        allow(new_game).to receive(:play_again?).and_return(false)
         allow(Game).to receive(:new).and_return(new_game)
       end
       it 'calls play on new Game instance' do
         game_play.current_player = current_player
+        new_game.current_player = current_player
+        expect(game_play).to receive(:turn)
         expect(Game).to receive(:new)
         expect(new_game).to receive(:play)
         game_play.play
