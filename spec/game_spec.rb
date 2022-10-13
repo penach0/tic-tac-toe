@@ -209,10 +209,26 @@ describe Game do
         allow(game_play).to receive(:game_setup)
         allow(game_play).to receive(:game_won?).and_return(false, true)
       end
-      it 'calls #turn and #change_player once' do
+      it 'calls #turn and #change_player once and displays victory message' do
         game_play.current_player = current_player
+        victory_message = "#{current_player.mark} player won! Congratulations!"
         expect(game_play).to receive(:turn).once
         expect(game_play).to receive(:change_player).once
+        expect(game_play).to receive(:puts).with(victory_message)
+        game_play.play
+      end
+    end
+    context 'when is not finished once and then drawn' do
+      before do
+        allow(game_play).to receive(:game_setup)
+        allow(game_play).to receive(:game_drawn?).and_return(false, true)
+      end
+      it 'calls #turn and #change_player once and displays draw message' do
+        game_play.current_player = current_player
+        draw_message = 'It\'s a draw! Well played by both.'
+        expect(game_play).to receive(:turn).once
+        expect(game_play).to receive(:change_player).once
+        expect(game_play).to receive(:puts).with(draw_message)
         game_play.play
       end
     end
