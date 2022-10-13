@@ -1,3 +1,5 @@
+# Represents a single square of a tic-tac-toe board
+# Holds methods relevant to inspecting and changing its status
 class Square
   attr_accessor :value
   attr_reader :position

@@ -1,6 +1,7 @@
 require_relative 'board'
 require_relative 'square'
 
+# This class handles the operations necessary to run a game of tic-tac-toe
 class Game
   attr_reader :board, :player1, :player2
   attr_accessor :current_player

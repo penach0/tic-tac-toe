@@ -1,3 +1,4 @@
+# Represents a player
 class Player
   attr_reader :mark
 

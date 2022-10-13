@@ -1,3 +1,5 @@
+# Represents a tic-tac-toe board and holds methods
+# to query information from its status
 class Board
   attr_reader :board
 
