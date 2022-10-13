@@ -26,6 +26,17 @@ class Game
     puts end_message
   end
 
+  def play_again?
+    print 'Play again? (y/n): '
+    loop do
+      answer = gets.chomp.downcase
+      return true if answer == 'y'
+      return false if answer == 'n'
+
+      print 'Please enter a valid input (y/n): '
+    end
+  end
+
   def turn
     show_board
     pick_square.play(current_player.mark)
