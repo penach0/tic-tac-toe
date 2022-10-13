@@ -233,4 +233,42 @@ describe Game do
       end
     end
   end
+
+  describe '#play_again?' do
+    subject(:game_again) { described_class.new }
+    context 'if the answer is No' do
+      before do
+        answer = 'n'
+        allow(game_again).to receive(:gets).and_return(answer)
+      end
+      it 'returns false' do
+        expect(game_again.play_again?).to be false
+      end
+    end
+
+    context 'if the answer is Yes' do
+      before do
+        answer = 'Y'
+        allow(game_again).to receive(:gets).and_return(answer)
+      end
+      it 'returns true' do
+        expect(game_again.play_again?).to be true
+      end
+    end
+
+    context 'if the input is invalid once' do
+      before do
+        invalid_input = '3'
+        answer = 'N'
+        allow(game_again).to receive(:gets).and_return(invalid_input, answer)
+      end
+      it 'runs the loop twice' do
+        initial_prompt = 'Play again? (y/n): '
+        warning_message = 'Please enter a valid input (y/n): '
+        expect(game_again).to receive(:print).with(initial_prompt)
+        expect(game_again).to receive(:print).with(warning_message)
+        game_again.play_again?
+      end
+    end
+  end
 end
