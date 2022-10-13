@@ -13,12 +13,6 @@ class Game
     @board = Board.new
   end
 
-  def game_setup
-    create_players(pick_mark)
-    @current_player = player1
-    show_board
-  end
-
   def play
     game_setup
     loop do
@@ -29,6 +23,11 @@ class Game
     end
     puts end_message
     Game.new.play if play_again?
+  end
+
+  def create_players(choice)
+    @player1 = Player.new(choice)
+    @player2 = Player.new(choice == 'crosses' ? 'circles' : 'crosses')
   end
 
   def play_again?
@@ -42,15 +41,6 @@ class Game
     end
   end
 
-  def turn
-    pick_square.play(@current_player.mark)
-    show_board
-  end
-
-  def change_player
-    @current_player == player1 ? player2 : player1
-  end
-
   def pick_mark
     print 'Pick your choice (Crosses or Circles): '
     loop do
@@ -59,11 +49,6 @@ class Game
 
       print 'That is not a valid option. Try again: '
     end
-  end
-
-  def create_players(choice)
-    @player1 = Player.new(choice)
-    @player2 = Player.new(choice == 'crosses' ? 'circles' : 'crosses')
   end
 
   def pick_square
@@ -82,6 +67,23 @@ class Game
       return true if (line - board.get_positions(@current_player.mark)).empty?
     end
     false
+  end
+
+  private
+
+  def game_setup
+    create_players(pick_mark)
+    @current_player = player1
+    show_board
+  end
+
+  def turn
+    pick_square.play(@current_player.mark)
+    show_board
+  end
+
+  def change_player
+    @current_player == player1 ? player2 : player1
   end
 
   def game_drawn?
